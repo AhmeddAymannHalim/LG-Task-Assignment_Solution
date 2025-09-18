@@ -1,0 +1,75 @@
+﻿@using LGTask.Assignment.BLL.ViewModels.PropertyItems
+@model PropertyItemVm
+@{
+    ViewData["Title"] = "Create Property";
+    Layout = "_Layout";
+}
+
+<div class="row">
+    <div class="col-12 mt-0">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="pb-1">Add New Property</h4>
+            </div>
+            <div class="card-body">
+               
+                <form action="/DeviceCategory/CreateProperty" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row py-3">
+                        <div class="col-md-6 col-12">
+                            <div class="mb-2">
+                                <label asp-for="PropertyDescription" class="form-label fw-semibold">Property Description</label>
+                                <input asp-for="PropertyDescription" class="form-control" />
+                                <span asp-validation-for="PropertyDescription" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="mb-2 d-flex align-items-end h-100">
+                                <button type="submit" class="btn btn-outline-success btn-sm fs-5">
+                                    Save
+                                    <span class="ms-2 fw-semibold">
+                                        <i class="mdi mdi-check"></i>
+                                    </span>
+                                </button>
+                                <a href="@Url.Action("GetAllProperties", "DeviceCategory")" class="btn btn-danger btn-sm fs-5 ms-2">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#createPropertyForm').on('submit', function (e) {
+                e.preventDefault();
+                var form = $(this);
+                $.ajax({
+                    url: form.attr('action'),
+                    type: form.attr('method'),
+                    data: form.serialize(),
+                    beforeSend: function () {
+                        form.find('button[type="submit"]').prop('disabled', true).prepend('<span class="spinner-border spinner-border-sm me-2"></span>');
+                    },
+                    success: function (response) {
+                        $('body').append('<div class="alert alert-success alert-dismissible fade show position-fixed bottom-0 end-0 m-3" role="alert">Property added successfully!<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
+                        setTimeout(() => window.location.href = '@Url.Action("Index", "DeviceCategory")', 2000);
+                    },
+                    error: function () {
+                        $('body').append('<div class="alert alert-danger alert-dismissible fade show position-fixed bottom-0 end-0 m-3" role="alert">An error occurred. Please try again.<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
+                    },
+                    complete: function () {
+                        form.find('button[type="submit"]').prop('disabled', false).find('.spinner-border').remove();
+                    }
+                });
+            });
+        });
+    </script>
+}

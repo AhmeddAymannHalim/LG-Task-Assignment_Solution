@@ -1,0 +1,46 @@
+﻿@model IEnumerable<LGTask.Assignment.BLL.ViewModels.CreateDevices.DeviceVm>
+@{
+    ViewData["Title"] = "Device Categories";
+    Layout = "_Layout";
+}
+
+<h2>Devices List</h2>
+
+<a asp-action="Create" class="btn btn-primary">Add New Device</a>
+
+
+<table class="table text-center">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Property Name</th>
+            <th>Property Value</th>
+            <th>Acquisition Date</th>
+            <th>Serial No</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var device in Model)
+        {
+            <tr>
+                <td>@device.DeviceName</td>
+                <td>@device.CategoryName</td>
+                <td>@device.PropertyName</td>
+                <td>@device.PropertyValue</td>
+                <td>@device.AcquisitionDate</td>
+                <td>@device.SerialNo</td>
+                <td>
+
+                    <a asp-action="Edit" asp-route-id="@device.Id" class="btn btn-outline-primary">Edit</a>
+                    <form asp-action="Delete" asp-route-id="@device.Id" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this device?');">
+                        <button type="submit" class="btn  btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
